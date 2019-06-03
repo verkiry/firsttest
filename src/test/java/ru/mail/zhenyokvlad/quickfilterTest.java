@@ -1,0 +1,579 @@
+package ru.mail.zhenyokvlad;
+
+import io.qameta.allure.Attachment;
+import io.qameta.allure.Description;
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.concurrent.TimeUnit;
+
+public class quickfilterTest {
+    private static WebDriver driver;
+    @Attachment
+    public byte[] attachScreenshot() {
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+    }
+
+    public static void setup()
+    {
+        System.setProperty("webdriver.chrome.driver", "/work/chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.get("http://192.168.4.222/login");
+    }
+
+    @Test
+    @Description("Check cases quickfilter")
+    public void QuickfilterCases() {
+        setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int t=0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t<80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+
+        /*int n = 0;
+        WebElement Cases = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[1]/div[2]/span[1]"));
+        while (n< 40) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                n++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+
+            }
+            Cases.click();
+            break;
+        } catch (Exception ex) {
+        }
+        */
+        WebDriverWait wait1 = new WebDriverWait(driver, 40);
+        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebElement Cases = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[1]/div[2]/span[1]"));
+        Cases.click();
+        String thirdcasename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
+        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[2]/div[1]/div[1]/div/div/input"));
+        intert.sendKeys(thirdcasename);
+        String firstcasename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        attachScreenshot();
+        Assert.assertEquals(firstcasename, thirdcasename);
+        tearDown();
+    }
+
+
+    @Test
+    @Description("Check persons quickfilter")
+    public void QuickfilterPersons() {
+        setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int t=0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t<80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+
+        /*int n = 0;
+        WebElement Persons = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[1]/div[2]/span[1]"));
+        while (n< 40) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                n++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+
+            }
+            Persons.click();
+            break;
+        } catch (Exception ex) {
+        }
+*/
+        WebDriverWait wait1 = new WebDriverWait(driver, 40);
+        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebElement Persons = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[1]/div[2]/span[1]"));
+        Persons.click();
+        String thirdpersonname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
+        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[2]/div[1]/div[1]/div/div/input"));
+        intert.sendKeys(thirdpersonname);
+        String firstpersonname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        attachScreenshot();
+        Assert.assertEquals(firstpersonname, thirdpersonname);
+        tearDown();
+    }
+
+    @Test
+    @Description("Check devices quickfilter")
+    public void QuickfilterDevices() {
+        setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int t=0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t<80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+
+        /*int n = 0;
+        WebElement Devices = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[1]/div[2]/span[1]"));
+        while (n< 40) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                n++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+
+            }
+            Devices.click();
+            break;
+        } catch (Exception ex) {
+        }
+*/
+        WebDriverWait wait1 = new WebDriverWait(driver, 40);
+        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebElement Devices = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[1]/div[2]/span[1]"));
+        Devices.click();
+        String thirddevicename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
+        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[2]/div[1]/div[1]/div/div/input"));
+        intert.sendKeys(thirddevicename);
+        String firstdevicename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        attachScreenshot();
+        Assert.assertEquals(firstdevicename, thirddevicename);
+        tearDown();
+    }
+
+    @Test
+    @Description("Check category quickfilter")
+    public void QuickfilterCategory() {
+        setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int t=0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t<80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+
+        /*int n = 0;
+        WebElement Categories = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[1]/div[2]/span[1]"));
+        while (n< 40) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                n++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+
+            }
+            Categories.click();
+            break;
+        } catch (Exception ex) {
+        }
+*/
+        WebDriverWait wait1 = new WebDriverWait(driver, 40);
+        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebElement Categories = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[1]/div[2]/span[1]"));
+        Categories.click();
+        String thirdcategoryname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[2]/div[2]/div[3]/div/div[2]/span[3]")).getText();
+        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[2]/div[1]/div[1]/div/div/input"));
+        intert.sendKeys(thirdcategoryname);
+        String firstcategoryname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[2]/div[2]/div[1]/div/div[2]/span[3]")).getText();
+        attachScreenshot();
+        Assert.assertEquals(firstcategoryname, thirdcategoryname);
+        tearDown();
+    }
+
+    @Test
+    @Description("Check direction quickfilter")
+    public void QuickfilterDirection() {
+        setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int t=0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t<80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+
+        /*int n = 0;
+        WebElement Directions = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[2]/span[1]"));
+        while (n< 40) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                n++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+
+            }
+            Directions.click();
+            break;
+        } catch (Exception ex) {
+        }
+        */
+        WebDriverWait wait1 = new WebDriverWait(driver, 40);
+        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebElement Directions = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[2]/span[1]"));
+        Directions.click();
+        String thirddirectionname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
+        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[2]/div[1]/div[1]/div/div/input"));
+        intert.sendKeys(thirddirectionname);
+        String firstdirectionname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        attachScreenshot();
+        Assert.assertEquals(firstdirectionname, thirddirectionname);
+        tearDown();
+    }
+
+    @Test
+    @Description("Check languages quickfilter")
+    public void QuickfilterLanguages() {
+        setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int t=0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t<80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+/*
+        int n = 0;
+        WebElement Languages = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[1]/div[2]/span[1]"));
+        while (n< 40) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                n++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+
+            }
+            Languages.click();
+            break;
+        } catch (Exception ex) {
+        }
+*/
+        WebDriverWait wait1 = new WebDriverWait(driver, 40);
+        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebElement Languages = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[1]/div[2]/span[1]"));
+        Languages.click();
+        String thirdlanguagename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
+        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[2]/div[1]/div[1]/div/div/input"));
+        intert.sendKeys(thirdlanguagename);
+        String firstlanguagename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        attachScreenshot();
+        Assert.assertEquals(firstlanguagename, thirdlanguagename);
+        tearDown();
+    }
+
+    @Test
+    @Description("Check applications quickfilter")
+    public void QuickfilterApplications() {
+        setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int t=0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t<80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+/*
+        int n = 0;
+        WebElement Applications = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[1]/div[2]/span[1]"));
+        while (n< 40) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                n++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+
+            }
+            Applications.click();
+            break;
+        } catch (Exception ex) {
+        }
+*/
+        WebDriverWait wait1 = new WebDriverWait(driver, 40);
+        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebElement Applications = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[1]/div[2]/span[1]"));
+        Applications.click();
+        String thirdapplicationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
+        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[1]/div[1]/div/div/input"));
+        intert.sendKeys(thirdapplicationname);
+        String firstapplicationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        attachScreenshot();
+        Assert.assertEquals(firstapplicationname, thirdapplicationname);
+        tearDown();
+    }
+
+    @Test
+    @Description("Check information quickfilter")
+    public void QuickfilterInformation() {
+        setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int t=0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t<80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+
+        /*
+        int n = 0;
+        WebElement Information = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[1]/div[2]/span[1]"));
+        while (n< 40) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                n++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+
+            }
+            Information.click();
+            break;
+        } catch (Exception ex) {
+        }
+*/
+        WebDriverWait wait1 = new WebDriverWait(driver, 40);
+        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebElement Information = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[1]/div[2]/span[1]"));
+        Information.click();
+        String thirdinformationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
+        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[2]/div[1]/div[1]/div/div/input"));
+        intert.sendKeys(thirdinformationname);
+        String firstinformationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        attachScreenshot();
+        Assert.assertEquals(firstinformationname, thirdinformationname);
+        tearDown();
+    }
+
+    @Test
+    @Description("Check abonent quickfilter")
+    public void QuickfilterAbonent() {
+        setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int t=0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t<80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+
+
+        /*
+        int n = 0;
+        WebElement abonent = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[1]/div[2]/span[1]"));
+        while (n< 80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                n++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+
+            }
+            abonent.click();
+            break;
+        } catch (Exception ex) {
+        }
+*/
+        WebDriverWait wait1 = new WebDriverWait(driver, 40);
+        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebElement abonent = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[1]/div[2]/span[1]"));
+        abonent.click();
+        String thirdabonentname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
+        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[2]/div[1]/div[1]/div/div/input"));
+        intert.sendKeys(thirdabonentname);
+        String firstabonentname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        attachScreenshot();
+        Assert.assertEquals(firstabonentname, thirdabonentname);
+        tearDown();
+    }
+
+    @Test
+    @Description("Check extra properties quickfilter")
+    public void QuickfilterProperty() {
+        setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int t=0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t<80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+/*
+        int n = 0;
+        WebElement properties = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[1]/div[2]/span[1]"));
+        while (n< 80) try {
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                n++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+
+            }
+            properties.click();
+            break;
+        } catch (Exception ex) {
+        }
+*/
+        WebDriverWait wait1 = new WebDriverWait(driver, 40);
+        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebElement properties = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[1]/div[2]/span[1]"));
+        properties.click();
+        String thirdpropertyname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
+        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[2]/div[1]/div[1]/div/div/input"));
+        intert.sendKeys(thirdpropertyname);
+        String firstpropertyname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        attachScreenshot();
+        Assert.assertEquals(firstpropertyname, thirdpropertyname);
+        tearDown();
+    }
+
+    public static void tearDown(){
+
+//System.out.print ("Login success");
+        driver.quit();
+    }
+}
