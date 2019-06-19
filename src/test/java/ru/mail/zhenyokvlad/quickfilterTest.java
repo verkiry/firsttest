@@ -2,7 +2,10 @@ package ru.mail.zhenyokvlad;
 
 import io.qameta.allure.Attachment;
 import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -13,24 +16,32 @@ import java.util.concurrent.TimeUnit;
 
 public class quickfilterTest {
     private static WebDriver driver;
-    @Attachment
-    public byte[] attachScreenshot() {
-        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-    }
-
-    public static void setup()
+    @Before
+    public void before()
     {
+
         System.setProperty("webdriver.chrome.driver", "/work/chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get("http://192.168.4.222/login");
     }
+    @After
+    public void after(){
+//System.out.print ("Login success");
+        driver.quit();
+    }
+    @Attachment
+    public byte[] attachScreenshot() {
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+    }
 
+
+    @Epic(value = "Проверка квикфильтров")
     @Test
-    @Description("Check cases quickfilter")
+    @Description("Квикфильтр в Дела")
     public void QuickfilterCases() {
-        setup();
+
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -69,7 +80,7 @@ public class quickfilterTest {
         }
         */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement Cases = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[1]/div[2]/span[1]"));
         Cases.click();
         String thirdcasename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
@@ -78,14 +89,14 @@ public class quickfilterTest {
         String firstcasename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
         Assert.assertEquals(firstcasename, thirdcasename);
-        tearDown();
+
     }
 
-
+    @Epic(value = "Проверка квикфильтров")
     @Test
-    @Description("Check persons quickfilter")
+    @Description("Квикфильтр в Персоны")
     public void QuickfilterPersons() {
-        setup();
+
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -124,7 +135,7 @@ public class quickfilterTest {
         }
 */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement Persons = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[1]/div[2]/span[1]"));
         Persons.click();
         String thirdpersonname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
@@ -133,13 +144,15 @@ public class quickfilterTest {
         String firstpersonname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
         Assert.assertEquals(firstpersonname, thirdpersonname);
-        tearDown();
+
     }
 
+
+    @Epic(value = "Проверка квикфильтров")
     @Test
-    @Description("Check devices quickfilter")
+    @Description("Квикфильтр в Устройства")
     public void QuickfilterDevices() {
-        setup();
+
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -178,7 +191,7 @@ public class quickfilterTest {
         }
 */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement Devices = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[1]/div[2]/span[1]"));
         Devices.click();
         String thirddevicename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
@@ -187,13 +200,15 @@ public class quickfilterTest {
         String firstdevicename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
         Assert.assertEquals(firstdevicename, thirddevicename);
-        tearDown();
+
     }
 
+
+    @Epic(value = "Проверка квикфильтров")
     @Test
-    @Description("Check category quickfilter")
+    @Description("Квикфильтр в Категории")
     public void QuickfilterCategory() {
-        setup();
+
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -231,8 +246,8 @@ public class quickfilterTest {
         } catch (Exception ex) {
         }
 */
-        WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        WebDriverWait wait1 = new WebDriverWait(driver, 60);
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement Categories = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[1]/div[2]/span[1]"));
         Categories.click();
         String thirdcategoryname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[2]/div[2]/div[3]/div/div[2]/span[3]")).getText();
@@ -241,13 +256,14 @@ public class quickfilterTest {
         String firstcategoryname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[2]/div[2]/div[1]/div/div[2]/span[3]")).getText();
         attachScreenshot();
         Assert.assertEquals(firstcategoryname, thirdcategoryname);
-        tearDown();
+
     }
 
+    @Epic(value = "Проверка квикфильтров")
     @Test
-    @Description("Check direction quickfilter")
+    @Description("Квикфильтре в Направления")
     public void QuickfilterDirection() {
-        setup();
+
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -286,7 +302,7 @@ public class quickfilterTest {
         }
         */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement Directions = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[2]/span[1]"));
         Directions.click();
         String thirddirectionname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
@@ -295,13 +311,14 @@ public class quickfilterTest {
         String firstdirectionname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
         Assert.assertEquals(firstdirectionname, thirddirectionname);
-        tearDown();
+
     }
 
+    @Epic(value = "Проверка квикфильтров")
     @Test
-    @Description("Check languages quickfilter")
+    @Description("Квикфильтр в Языки")
     public void QuickfilterLanguages() {
-        setup();
+
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -340,7 +357,7 @@ public class quickfilterTest {
         }
 */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement Languages = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[1]/div[2]/span[1]"));
         Languages.click();
         String thirdlanguagename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
@@ -349,13 +366,14 @@ public class quickfilterTest {
         String firstlanguagename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
         Assert.assertEquals(firstlanguagename, thirdlanguagename);
-        tearDown();
+
     }
 
+    @Epic(value = "Проверка квикфильтров")
     @Test
-    @Description("Check applications quickfilter")
+    @Description("Квикфильтр в Приложения")
     public void QuickfilterApplications() {
-        setup();
+
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -394,7 +412,7 @@ public class quickfilterTest {
         }
 */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement Applications = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[1]/div[2]/span[1]"));
         Applications.click();
         String thirdapplicationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
@@ -403,13 +421,14 @@ public class quickfilterTest {
         String firstapplicationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
         Assert.assertEquals(firstapplicationname, thirdapplicationname);
-        tearDown();
+
     }
 
+    @Epic(value = "Проверка квикфильтров")
     @Test
-    @Description("Check information quickfilter")
+    @Description("Квикфильтр в Информация в тексте")
     public void QuickfilterInformation() {
-        setup();
+
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -449,7 +468,7 @@ public class quickfilterTest {
         }
 */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement Information = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[1]/div[2]/span[1]"));
         Information.click();
         String thirdinformationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
@@ -458,13 +477,14 @@ public class quickfilterTest {
         String firstinformationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
         Assert.assertEquals(firstinformationname, thirdinformationname);
-        tearDown();
+
     }
 
+    @Epic(value = "Проверка квикфильтров")
     @Test
-    @Description("Check abonent quickfilter")
+    @Description("Квикфильтр в Абоненты и группы")
     public void QuickfilterAbonent() {
-        setup();
+
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -505,7 +525,7 @@ public class quickfilterTest {
         }
 */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement abonent = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[1]/div[2]/span[1]"));
         abonent.click();
         String thirdabonentname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
@@ -514,13 +534,14 @@ public class quickfilterTest {
         String firstabonentname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
         Assert.assertEquals(firstabonentname, thirdabonentname);
-        tearDown();
+
     }
 
+    @Epic(value = "Проверка квикфильтров")
     @Test
-    @Description("Check extra properties quickfilter")
+    @Description("Квикфильтр в Дополнительные свойства")
     public void QuickfilterProperty() {
-        setup();
+
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -559,7 +580,7 @@ public class quickfilterTest {
         }
 */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"), "Идет загрузка. Пожалуйста, подождите..." ));
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement properties = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[1]/div[2]/span[1]"));
         properties.click();
         String thirdpropertyname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
@@ -568,12 +589,8 @@ public class quickfilterTest {
         String firstpropertyname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
         Assert.assertEquals(firstpropertyname, thirdpropertyname);
-        tearDown();
+
     }
 
-    public static void tearDown(){
 
-//System.out.print ("Login success");
-        driver.quit();
-    }
 }
