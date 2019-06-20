@@ -3,6 +3,7 @@ package ru.mail.zhenyokvlad;
 import io.qameta.allure.Attachment;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -57,28 +58,10 @@ public class quickfilterTest {
                 //500 - 0.5 сек
             } catch (InterruptedException ex) {
             }
-            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
             workspace.click();
             break;
         } catch (Exception ex) {
         }
-
-        /*int n = 0;
-        WebElement Cases = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[1]/div[2]/span[1]"));
-        while (n< 40) try {
-            try {
-                //ДЕЛАЕМ
-                Thread.sleep(500);
-                n++;
-                //500 - 0.5 сек
-            } catch (InterruptedException ex) {
-
-            }
-            Cases.click();
-            break;
-        } catch (Exception ex) {
-        }
-        */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         WebElement Cases = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[1]/div[2]/span[1]"));
@@ -88,7 +71,7 @@ public class quickfilterTest {
         intert.sendKeys(thirdcasename);
         String firstcasename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
-        Assert.assertEquals(firstcasename, thirdcasename);
+        Assert.assertThat(firstcasename, CoreMatchers.containsString(thirdcasename));
 
     }
 
@@ -143,7 +126,7 @@ public class quickfilterTest {
         intert.sendKeys(thirdpersonname);
         String firstpersonname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
-        Assert.assertEquals(firstpersonname, thirdpersonname);
+        Assert.assertThat(firstpersonname, CoreMatchers.containsString(thirdpersonname));
 
     }
 
@@ -199,7 +182,7 @@ public class quickfilterTest {
         intert.sendKeys(thirddevicename);
         String firstdevicename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
-        Assert.assertEquals(firstdevicename, thirddevicename);
+        Assert.assertThat(firstdevicename, CoreMatchers.containsString(thirddevicename));
 
     }
 
@@ -255,7 +238,7 @@ public class quickfilterTest {
         intert.sendKeys(thirdcategoryname);
         String firstcategoryname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[2]/div[2]/div[1]/div/div[2]/span[3]")).getText();
         attachScreenshot();
-        Assert.assertEquals(firstcategoryname, thirdcategoryname);
+        Assert.assertThat(firstcategoryname, CoreMatchers.containsString(thirdcategoryname));
 
     }
 
@@ -310,7 +293,7 @@ public class quickfilterTest {
         intert.sendKeys(thirddirectionname);
         String firstdirectionname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
-        Assert.assertEquals(firstdirectionname, thirddirectionname);
+        Assert.assertThat(firstdirectionname, CoreMatchers.containsString(thirddirectionname));
 
     }
 
@@ -365,7 +348,7 @@ public class quickfilterTest {
         intert.sendKeys(thirdlanguagename);
         String firstlanguagename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
-        Assert.assertEquals(firstlanguagename, thirdlanguagename);
+        Assert.assertThat(firstlanguagename, CoreMatchers.containsString(thirdlanguagename));
 
     }
 
@@ -420,7 +403,7 @@ public class quickfilterTest {
         intert.sendKeys(thirdapplicationname);
         String firstapplicationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
-        Assert.assertEquals(firstapplicationname, thirdapplicationname);
+        Assert.assertThat(firstapplicationname, CoreMatchers.containsString(thirdapplicationname));
 
     }
 
@@ -476,7 +459,7 @@ public class quickfilterTest {
         intert.sendKeys(thirdinformationname);
         String firstinformationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
-        Assert.assertEquals(firstinformationname, thirdinformationname);
+        Assert.assertThat(firstinformationname, CoreMatchers.containsString(thirdinformationname));
 
     }
 
@@ -533,7 +516,7 @@ public class quickfilterTest {
         intert.sendKeys(thirdabonentname);
         String firstabonentname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
-        Assert.assertEquals(firstabonentname, thirdabonentname);
+        Assert.assertThat(firstabonentname, CoreMatchers.containsString(thirdabonentname));
 
     }
 
@@ -588,7 +571,7 @@ public class quickfilterTest {
         intert.sendKeys(thirdpropertyname);
         String firstpropertyname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
         attachScreenshot();
-        Assert.assertEquals(firstpropertyname, thirdpropertyname);
+        Assert.assertThat(firstpropertyname, CoreMatchers.containsString(thirdpropertyname));
 
     }
 
