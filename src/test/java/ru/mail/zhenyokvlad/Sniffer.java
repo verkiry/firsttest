@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import java.util.concurrent.TimeUnit;
 
-public class SnifferTest {
+public class Sniffer {
     private static WebDriver driver;
     @Attachment
     public byte[] attachScreenshot() {

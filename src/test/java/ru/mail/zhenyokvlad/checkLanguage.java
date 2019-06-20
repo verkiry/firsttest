@@ -1,10 +1,7 @@
 package ru.mail.zhenyokvlad;
 
 public class checkLanguage {
-    static  boolean checker (String teststring)
-
-    {
-
+    static boolean checker(String teststring) {
         String[] test = teststring.trim().split("\\s+");
         int size = test.length;
 
@@ -13,14 +10,22 @@ public class checkLanguage {
         int contains = 0;
         for (int j = 0; j < size; j++) {
             char[] word = test[j].toCharArray();
-            for (int i = 0; i < amountofletters; i++) {
-                if (word[0] == alphabet[i])
-                    contains++;
+            if (word[0] != '"') {
+                for (int i = 0; i < amountofletters; i++) {
+                    if (word[0] == alphabet[i])
+                        contains++;
+                }
+            } else {
+                for (int i = 0; i < amountofletters; i++) {
+                    if (word[1] == alphabet[i])
+                        contains++;
+                }
             }
         }
-        if (contains == size)
-            return true;
-        else
-            return false;
+            if (contains == size)
+                return true;
+            else
+                return false;
+        }
     }
-}
+
