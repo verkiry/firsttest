@@ -19,7 +19,7 @@ import org.openqa.selenium.TakesScreenshot;
 
 
 
-public class FirstTest {
+public class First {
     private static WebDriver driver;
     @Before
     public void before()

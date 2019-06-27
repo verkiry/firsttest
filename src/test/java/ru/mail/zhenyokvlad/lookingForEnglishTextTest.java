@@ -49,10 +49,7 @@ public class lookingForEnglishTextTest {
         WebElement passwordField = driver.findElement(By.name("PWD"));
         passwordField.sendKeys("12345");
         passwordField.sendKeys(Keys.ENTER);
-        // try {
-        //     Thread.sleep(3000);
-        // } catch (InterruptedException ie) {
-        //  }
+      //залогинились
 
         int t = 0;
         WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
@@ -64,7 +61,6 @@ public class lookingForEnglishTextTest {
                 //500 - 0.5 сек
             } catch (InterruptedException ex) {
             }
-            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
             workspace.click();
             break;
         } catch (Exception ex) {
@@ -72,16 +68,20 @@ public class lookingForEnglishTextTest {
 
         WebDriverWait wait = new WebDriverWait(driver, 40);
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
+        //ждем, пока пропадет прелоадер и можно будет продолжать работу
 
         WebElement categories = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[1]/div[2]/span[1]"));
         categories.click();
+        //нашли и кликнули на стрелочку у фильтра Категории
         List<WebElement> Texts = driver.findElements(By.xpath("//html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[2]/div[2]//span[@class='text-overflow']"));
+        //получили список пунктов внутри фильтра Категории
         int amountofelements = Texts.size();
+        //проверяем все пункты
         for (int i = 0; i < amountofelements; i++) {
-            String text = Texts.get(i).getText();
-            Boolean isenglish = checkLanguage.checker(Texts.get(i).getText());
+            String text = Texts.get(i).getText(); //получаем текст внутри пункта
+            Boolean isenglish = checkLanguage.checker(Texts.get(i).getText()); //проверяем, полностью ли текст на английском
             if (isenglish == true)
-                Allure.addAttachment("Непереведенный фильтр Категории -> "+text, text);
+                Allure.addAttachment("Непереведенный фильтр Категории -> "+text, text); //если поностью на английском, заносим это в отчет
         }
 
     }
@@ -90,17 +90,12 @@ public class lookingForEnglishTextTest {
     @Feature(value = "Направления")
     @Test
     public void lookingInDirections() {
-        //setup();
+        //данный тест работает аналогично тесту по категориям
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
         passwordField.sendKeys("12345");
         passwordField.sendKeys(Keys.ENTER);
-        // try {
-        //     Thread.sleep(3000);
-        // } catch (InterruptedException ie) {
-        //  }
-
         int t = 0;
         WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
         while (t < 80) try {
@@ -111,7 +106,6 @@ public class lookingForEnglishTextTest {
                 //500 - 0.5 сек
             } catch (InterruptedException ex) {
             }
-            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
             workspace.click();
             break;
         } catch (Exception ex) {
@@ -136,17 +130,13 @@ public class lookingForEnglishTextTest {
     @Epic(value = "Поиск непереведенных строк в фильтре Категории")
     @Test
     public void lookingInSubCategories() {
-        //setup();
+        //тут проверяем подкатегории в фильтре Категории
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
         passwordField.sendKeys("12345");
         passwordField.sendKeys(Keys.ENTER);
-        // try {
-        //     Thread.sleep(3000);
-        // } catch (InterruptedException ie) {
-        //  }
-
+        //залогинились
         int t = 0;
         WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
         while (t < 80) try {
@@ -157,26 +147,29 @@ public class lookingForEnglishTextTest {
                 //500 - 0.5 сек
             } catch (InterruptedException ex) {
             }
-            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+            //
             workspace.click();
             break;
         } catch (Exception ex) {
         }
-
         WebDriverWait wait = new WebDriverWait(driver, 40);
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-
+        //зашли в воркспейс и ждем, пока пропадет прелоадер, чтобы продолжить работу
         WebElement categories = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[1]/div[2]/span[1]"));
         categories.click();
+        //нашли и кликнули по стрелочке у фильтра Категории
         List<WebElement> categoriesWithCombobox = driver.findElements(By.xpath("//div[@class='b-filterItem_head']//span[@class='b-filterItem_arrow f_chO']"));
+        //получаем список пунктов с комбобоксами (стрелочками)
         List<WebElement> categoriesWithComboboxNames = driver.findElements(By.xpath("//div[@class='b-filterItem_head']//span[@class='b-filterItem_arrow f_chO']/../span[@class='text-overflow']"));
+        //список имен пунктов с комбобоксами
         int amountOfCategories = categoriesWithCombobox.size();
-        for (int i = 0; i < amountOfCategories; i++) {
-            String categoryName = categoriesWithComboboxNames.get(i).getText();
-            categoriesWithCombobox.get(i).click();
+        for (int i = 0; i < amountOfCategories; i++) { //для всех пунтов с комбобоксами (для всех имеющих выпадающие списки)
+            String categoryName = categoriesWithComboboxNames.get(i).getText(); //записали имя текущего пункта
+            categoriesWithCombobox.get(i).click(); //кликнули на комбобокс, раскрыли выпадающий список
             List<WebElement> categoriesInsideCombobox = driver.findElements(By.xpath("//div[@class='b-filterItem_head']//span[@class='b-filterItem_arrow f_chO']/../../../..//div[@class='bvar_dropdown f_chB']//span[@class='text-overflow']"));
+            //получили список пунктов из выпадающего списка
             int amountOfCategoriesInsideCombobox = categoriesInsideCombobox.size();
-            for (int j = 0; j < amountOfCategoriesInsideCombobox; j++) {
+            for (int j = 0; j < amountOfCategoriesInsideCombobox; j++) { //все пункты из выпадающего списка проверили на наличие перевода
                 String categoryText = categoriesInsideCombobox.get(j).getText();
                 Boolean isenglish = checkLanguage.checker(categoryText);
                 if (isenglish == true) {

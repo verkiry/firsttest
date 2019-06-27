@@ -13,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class quickfilterTest {
@@ -47,7 +48,7 @@ public class quickfilterTest {
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
         passwordField.sendKeys("12345");
-        passwordField.sendKeys(Keys.ENTER);
+        passwordField.sendKeys(Keys.ENTER); //залогинились
         int t=0;
         WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
         while (t<80) try {
@@ -63,16 +64,22 @@ public class quickfilterTest {
         } catch (Exception ex) {
         }
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        WebElement Cases = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[1]/div[2]/span[1]"));
-        Cases.click();
-        String thirdcasename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
-        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[2]/div[1]/div[1]/div/div/input"));
-        intert.sendKeys(thirdcasename);
-        String firstcasename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
-        attachScreenshot();
-        Assert.assertThat(firstcasename, CoreMatchers.containsString(thirdcasename));
-
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"))); //зашли в воркспейс, ждем, пока пропадет прелоадер чтобы продолжить работу
+        String CasesXpath="/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/div[1]";
+        WebElement CasesArrow = driver.findElement(By.xpath(CasesXpath+"//span[@class='b-filterItem_arrow f_chO']")); //стрелка у пункта Дела
+        CasesArrow.click(); //жмем стрелку
+        List<WebElement> cases= driver.findElements(By.xpath(CasesXpath+"/..//span[@class='text-overflow']")); //получаем список Дел
+        int rand=(int) (Math.random()*cases.size()); //случайно выбираем одно дело из списка
+        System.out.println(rand);
+        String caseNameToCheck=cases.get(rand).getText(); //записываем имя случайно выбранного дела
+        System.out.println(caseNameToCheck);
+        WebElement intert=driver.findElement(By.xpath(CasesXpath+"/..//input[@class='filterSearch-input ng-untouched ng-pristine ng-valid']")); //нашли поле квикфильтра
+        intert.sendKeys(caseNameToCheck);//в квикфильтр вставляем имя случайно выбранного дела
+        List<WebElement> casesAfter= driver.findElements(By.xpath(CasesXpath+"/..//span[@class='text-overflow']")); //получаем список дел после применения квикфильтра
+        String firstcasename= casesAfter.get(0).getText(); //записываем имя первого дела из нового списка
+        attachScreenshot(); //скриншот в отчет
+        Assert.assertThat(firstcasename, CoreMatchers.containsString(caseNameToCheck)); //проверяем, содержит ли имя первого дела из нового списка имя случайно выбранного дела. Если содержит, то квикфильтр работает верно, тест пройден
+//остальные тесты в данном тестовом классе работают аналогично
     }
 
     @Epic(value = "Проверка квикфильтров")
@@ -95,38 +102,25 @@ public class quickfilterTest {
                 //500 - 0.5 сек
             } catch (InterruptedException ex) {
             }
-            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
             workspace.click();
             break;
         } catch (Exception ex) {
         }
 
-        /*int n = 0;
-        WebElement Persons = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[1]/div[2]/span[1]"));
-        while (n< 40) try {
-            try {
-                //ДЕЛАЕМ
-                Thread.sleep(500);
-                n++;
-                //500 - 0.5 сек
-            } catch (InterruptedException ex) {
-
-            }
-            Persons.click();
-            break;
-        } catch (Exception ex) {
-        }
-*/
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        WebElement Persons = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[1]/div[2]/span[1]"));
-        Persons.click();
-        String thirdpersonname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
-        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[2]/div[1]/div[1]/div/div/input"));
-        intert.sendKeys(thirdpersonname);
-        String firstpersonname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        String PersonsXpath="/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[2]/div[1]";
+        WebElement PersonsArrow = driver.findElement(By.xpath(PersonsXpath+"//span[@class='b-filterItem_arrow f_chO']"));
+        PersonsArrow.click();
+        List<WebElement> persons= driver.findElements(By.xpath(PersonsXpath+"/..//span[@class='text-overflow']"));
+        int rand=(int) (Math.random()*persons.size());
+        String personNameToCheck=persons.get(rand).getText();
+        WebElement intert=driver.findElement(By.xpath(PersonsXpath+"/..//input[@class='filterSearch-input ng-untouched ng-pristine ng-valid']"));
+        intert.sendKeys(personNameToCheck);
+        List<WebElement> personsAfter= driver.findElements(By.xpath(PersonsXpath+"/..//span[@class='text-overflow']"));
+        String firstPersonName= personsAfter.get(0).getText();
         attachScreenshot();
-        Assert.assertThat(firstpersonname, CoreMatchers.containsString(thirdpersonname));
+        Assert.assertThat(firstPersonName, CoreMatchers.containsString(personNameToCheck));
 
     }
 
@@ -156,33 +150,20 @@ public class quickfilterTest {
             break;
         } catch (Exception ex) {
         }
-
-        /*int n = 0;
-        WebElement Devices = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[1]/div[2]/span[1]"));
-        while (n< 40) try {
-            try {
-                //ДЕЛАЕМ
-                Thread.sleep(500);
-                n++;
-                //500 - 0.5 сек
-            } catch (InterruptedException ex) {
-
-            }
-            Devices.click();
-            break;
-        } catch (Exception ex) {
-        }
-*/
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        WebElement Devices = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[1]/div[2]/span[1]"));
-        Devices.click();
-        String thirddevicename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
-        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[2]/div[1]/div[1]/div/div/input"));
-        intert.sendKeys(thirddevicename);
-        String firstdevicename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        String DevicesXpath="/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[3]/div[1]";
+        WebElement DevicesArrow = driver.findElement(By.xpath(DevicesXpath+"//span[@class='b-filterItem_arrow f_chO']"));
+        DevicesArrow.click();
+        List<WebElement> devices= driver.findElements(By.xpath(DevicesXpath+"/..//span[@class='text-overflow']"));
+        int rand=(int) (Math.random()*devices.size());
+        String deviceNameToCheck=devices.get(rand).getText();
+        WebElement intert=driver.findElement(By.xpath(DevicesXpath+"/..//input[@class='filterSearch-input ng-untouched ng-pristine ng-valid']"));
+        intert.sendKeys(deviceNameToCheck);
+        List<WebElement> devicesAfter= driver.findElements(By.xpath(DevicesXpath+"/..//span[@class='text-overflow']"));
+        String firstDeviceName= devicesAfter.get(0).getText();
         attachScreenshot();
-        Assert.assertThat(firstdevicename, CoreMatchers.containsString(thirddevicename));
+        Assert.assertThat(firstDeviceName, CoreMatchers.containsString(deviceNameToCheck));
 
     }
 
@@ -212,33 +193,20 @@ public class quickfilterTest {
             break;
         } catch (Exception ex) {
         }
-
-        /*int n = 0;
-        WebElement Categories = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[1]/div[2]/span[1]"));
-        while (n< 40) try {
-            try {
-                //ДЕЛАЕМ
-                Thread.sleep(500);
-                n++;
-                //500 - 0.5 сек
-            } catch (InterruptedException ex) {
-
-            }
-            Categories.click();
-            break;
-        } catch (Exception ex) {
-        }
-*/
         WebDriverWait wait1 = new WebDriverWait(driver, 60);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        WebElement Categories = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[1]/div[2]/span[1]"));
-        Categories.click();
-        String thirdcategoryname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[2]/div[2]/div[3]/div/div[2]/span[3]")).getText();
-        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[2]/div[1]/div[1]/div/div/input"));
-        intert.sendKeys(thirdcategoryname);
-        String firstcategoryname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[2]/div[2]/div[1]/div/div[2]/span[3]")).getText();
+        String CategoriesXpath="/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[4]/div[1]";
+        WebElement CategoriesArrow = driver.findElement(By.xpath(CategoriesXpath+"//span[@class='b-filterItem_arrow f_chO']"));
+        CategoriesArrow.click();
+        List<WebElement> categories= driver.findElements(By.xpath(CategoriesXpath+"/..//span[@class='text-overflow']"));
+        int rand=(int) (Math.random()*categories.size());
+        String categoryNameToCheck=categories.get(rand).getText();
+        WebElement intert=driver.findElement(By.xpath(CategoriesXpath+"/..//input[@class='filterSearch-input ng-untouched ng-pristine ng-valid']"));
+        intert.sendKeys(categoryNameToCheck);
+        List<WebElement> categoriesAfter= driver.findElements(By.xpath(CategoriesXpath+"/..//span[@class='text-overflow']"));
+        String firstCategoryName= categoriesAfter.get(0).getText();
         attachScreenshot();
-        Assert.assertThat(firstcategoryname, CoreMatchers.containsString(thirdcategoryname));
+        Assert.assertThat(firstCategoryName, CoreMatchers.containsString(categoryNameToCheck));
 
     }
 
@@ -267,33 +235,20 @@ public class quickfilterTest {
             break;
         } catch (Exception ex) {
         }
-
-        /*int n = 0;
-        WebElement Directions = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[2]/span[1]"));
-        while (n< 40) try {
-            try {
-                //ДЕЛАЕМ
-                Thread.sleep(500);
-                n++;
-                //500 - 0.5 сек
-            } catch (InterruptedException ex) {
-
-            }
-            Directions.click();
-            break;
-        } catch (Exception ex) {
-        }
-        */
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        WebElement Directions = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[2]/span[1]"));
-        Directions.click();
-        String thirddirectionname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
-        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[2]/div[1]/div[1]/div/div/input"));
-        intert.sendKeys(thirddirectionname);
-        String firstdirectionname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        String DirectionsXpath="/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div[1]";
+        WebElement DirectionsArrow = driver.findElement(By.xpath(DirectionsXpath+"//span[@class='b-filterItem_arrow f_chO']"));
+        DirectionsArrow.click();
+        List<WebElement> directions= driver.findElements(By.xpath(DirectionsXpath+"/..//span[@class='text-overflow']"));
+        int rand=(int) (Math.random()*directions.size());
+        String directionNameToCheck=directions.get(rand).getText();
+        WebElement intert=driver.findElement(By.xpath(DirectionsXpath+"/..//input[@class='filterSearch-input ng-untouched ng-pristine ng-valid']"));
+        intert.sendKeys(directionNameToCheck);
+        List<WebElement> directionsAfter= driver.findElements(By.xpath(DirectionsXpath+"/..//span[@class='text-overflow']"));
+        String firstDirectionName= directionsAfter.get(0).getText();
         attachScreenshot();
-        Assert.assertThat(firstdirectionname, CoreMatchers.containsString(thirddirectionname));
+        Assert.assertThat(firstDirectionName, CoreMatchers.containsString(directionNameToCheck));
 
     }
 
@@ -322,34 +277,20 @@ public class quickfilterTest {
             break;
         } catch (Exception ex) {
         }
-/*
-        int n = 0;
-        WebElement Languages = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[1]/div[2]/span[1]"));
-        while (n< 40) try {
-            try {
-                //ДЕЛАЕМ
-                Thread.sleep(500);
-                n++;
-                //500 - 0.5 сек
-            } catch (InterruptedException ex) {
-
-            }
-            Languages.click();
-            break;
-        } catch (Exception ex) {
-        }
-*/
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        WebElement Languages = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[1]/div[2]/span[1]"));
-        Languages.click();
-        String thirdlanguagename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
-        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[2]/div[1]/div[1]/div/div/input"));
-        intert.sendKeys(thirdlanguagename);
-        String firstlanguagename= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        String LanguagesXpath="/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[2]/div[1]";
+        WebElement LanguagesArrow = driver.findElement(By.xpath(LanguagesXpath+"//span[@class='b-filterItem_arrow f_chO']"));
+        LanguagesArrow.click();
+        List<WebElement> languages= driver.findElements(By.xpath(LanguagesXpath+"/..//span[@class='text-overflow']"));
+        int rand=(int) (Math.random()*languages.size());
+        String languageNameToCheck=languages.get(rand).getText();
+        WebElement intert=driver.findElement(By.xpath(LanguagesXpath+"/..//input[@class='filterSearch-input ng-untouched ng-pristine ng-valid']"));
+        intert.sendKeys(languageNameToCheck);
+        List<WebElement> languagesAfter= driver.findElements(By.xpath(LanguagesXpath+"/..//span[@class='text-overflow']"));
+        String firstLanguageName= languagesAfter.get(0).getText();
         attachScreenshot();
-        Assert.assertThat(firstlanguagename, CoreMatchers.containsString(thirdlanguagename));
-
+        Assert.assertThat(firstLanguageName, CoreMatchers.containsString(languageNameToCheck));
     }
 
     @Epic(value = "Проверка квикфильтров")
@@ -377,33 +318,20 @@ public class quickfilterTest {
             break;
         } catch (Exception ex) {
         }
-/*
-        int n = 0;
-        WebElement Applications = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[1]/div[2]/span[1]"));
-        while (n< 40) try {
-            try {
-                //ДЕЛАЕМ
-                Thread.sleep(500);
-                n++;
-                //500 - 0.5 сек
-            } catch (InterruptedException ex) {
-
-            }
-            Applications.click();
-            break;
-        } catch (Exception ex) {
-        }
-*/
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        WebElement Applications = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[1]/div[2]/span[1]"));
-        Applications.click();
-        String thirdapplicationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
-        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[1]/div[1]/div/div/input"));
-        intert.sendKeys(thirdapplicationname);
-        String firstapplicationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        String ApplicationsXpath="/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[3]/div[1]";
+        WebElement ApplicationsArrow = driver.findElement(By.xpath(ApplicationsXpath+"//span[@class='b-filterItem_arrow f_chO']"));
+        ApplicationsArrow.click();
+        List<WebElement> applications= driver.findElements(By.xpath(ApplicationsXpath+"/..//span[@class='text-overflow']"));
+        int rand=(int) (Math.random()*applications.size());
+        String applicationNameToCheck=applications.get(rand).getText();
+        WebElement intert=driver.findElement(By.xpath(ApplicationsXpath+"/..//input[@class='filterSearch-input ng-untouched ng-pristine ng-valid']"));
+        intert.sendKeys(applicationNameToCheck);
+        List<WebElement> applicationsAfter= driver.findElements(By.xpath(ApplicationsXpath+"/..//span[@class='text-overflow']"));
+        String firstApplicationName= applicationsAfter.get(0).getText();
         attachScreenshot();
-        Assert.assertThat(firstapplicationname, CoreMatchers.containsString(thirdapplicationname));
+        Assert.assertThat(firstApplicationName, CoreMatchers.containsString(applicationNameToCheck));
 
     }
 
@@ -433,33 +361,20 @@ public class quickfilterTest {
         } catch (Exception ex) {
         }
 
-        /*
-        int n = 0;
-        WebElement Information = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[1]/div[2]/span[1]"));
-        while (n< 40) try {
-            try {
-                //ДЕЛАЕМ
-                Thread.sleep(500);
-                n++;
-                //500 - 0.5 сек
-            } catch (InterruptedException ex) {
-
-            }
-            Information.click();
-            break;
-        } catch (Exception ex) {
-        }
-*/
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        WebElement Information = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[1]/div[2]/span[1]"));
-        Information.click();
-        String thirdinformationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
-        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[2]/div[1]/div[1]/div/div/input"));
-        intert.sendKeys(thirdinformationname);
-        String firstinformationname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        String InfoXpath="/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[4]/div[1]";
+        WebElement InfoArrow = driver.findElement(By.xpath(InfoXpath+"//span[@class='b-filterItem_arrow f_chO']"));
+       InfoArrow.click();
+        List<WebElement> infos= driver.findElements(By.xpath(InfoXpath+"/..//span[@class='text-overflow']"));
+        int rand=(int) (Math.random()*infos.size());
+        String infoNameToCheck=infos.get(rand).getText();
+        WebElement intert=driver.findElement(By.xpath(InfoXpath+"/..//input[@class='filterSearch-input ng-untouched ng-pristine ng-valid']"));
+        intert.sendKeys(infoNameToCheck);
+        List<WebElement> infosAfter= driver.findElements(By.xpath(InfoXpath+"/..//span[@class='text-overflow']"));
+        String firstInfoName= infosAfter.get(0).getText();
         attachScreenshot();
-        Assert.assertThat(firstinformationname, CoreMatchers.containsString(thirdinformationname));
+        Assert.assertThat(firstInfoName, CoreMatchers.containsString(infoNameToCheck));
 
     }
 
@@ -489,34 +404,20 @@ public class quickfilterTest {
         } catch (Exception ex) {
         }
 
-
-        /*
-        int n = 0;
-        WebElement abonent = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[1]/div[2]/span[1]"));
-        while (n< 80) try {
-            try {
-                //ДЕЛАЕМ
-                Thread.sleep(500);
-                n++;
-                //500 - 0.5 сек
-            } catch (InterruptedException ex) {
-
-            }
-            abonent.click();
-            break;
-        } catch (Exception ex) {
-        }
-*/
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        WebElement abonent = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[1]/div[2]/span[1]"));
-        abonent.click();
-        String thirdabonentname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
-        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[2]/div[1]/div[1]/div/div/input"));
-        intert.sendKeys(thirdabonentname);
-        String firstabonentname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        String AbonentsXpath="/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[5]/div[1]";
+        WebElement AbonentsArrow = driver.findElement(By.xpath(AbonentsXpath+"//span[@class='b-filterItem_arrow f_chO']"));
+        AbonentsArrow.click();
+        List<WebElement> abonents= driver.findElements(By.xpath(AbonentsXpath+"/..//span[@class='text-overflow']"));
+        int rand=(int) (Math.random()*abonents.size());
+        String abonentNameToCheck=abonents.get(rand).getText();
+        WebElement intert=driver.findElement(By.xpath(AbonentsXpath+"/..//input[@class='filterSearch-input ng-untouched ng-pristine ng-valid']"));
+        intert.sendKeys(abonentNameToCheck);
+        List<WebElement> abonentsAfter= driver.findElements(By.xpath(AbonentsXpath+"/..//span[@class='text-overflow']"));
+        String firstAbonentName= abonentsAfter.get(0).getText();
         attachScreenshot();
-        Assert.assertThat(firstabonentname, CoreMatchers.containsString(thirdabonentname));
+        Assert.assertThat(firstAbonentName, CoreMatchers.containsString(abonentNameToCheck));
 
     }
 
@@ -545,33 +446,20 @@ public class quickfilterTest {
             break;
         } catch (Exception ex) {
         }
-/*
-        int n = 0;
-        WebElement properties = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[1]/div[2]/span[1]"));
-        while (n< 80) try {
-            try {
-                //ДЕЛАЕМ
-                Thread.sleep(500);
-                n++;
-                //500 - 0.5 сек
-            } catch (InterruptedException ex) {
-
-            }
-            properties.click();
-            break;
-        } catch (Exception ex) {
-        }
-*/
         WebDriverWait wait1 = new WebDriverWait(driver, 40);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        WebElement properties = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[1]/div[2]/span[1]"));
-        properties.click();
-        String thirdpropertyname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[2]/div[2]/div[3]/div/div[2]/span[2]")).getText();
-        WebElement intert=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[2]/div[1]/div[1]/div/div/input"));
-        intert.sendKeys(thirdpropertyname);
-        String firstpropertyname= driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[2]/div[2]/div[1]/div/div[2]/span[2]")).getText();
+        String ExtraXpath="/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[3]/div[6]/div[1]";
+        WebElement ExtraArrow = driver.findElement(By.xpath(ExtraXpath+"//span[@class='b-filterItem_arrow f_chO']"));
+        ExtraArrow.click();
+        List<WebElement> extraProperties= driver.findElements(By.xpath(ExtraXpath+"/..//span[@class='text-overflow']"));
+        int rand=(int) (Math.random()*extraProperties.size());
+        String extrapropertyNameToCheck=extraProperties.get(rand).getText();
+        WebElement intert=driver.findElement(By.xpath(ExtraXpath+"/..//input[@class='filterSearch-input ng-untouched ng-pristine ng-valid']"));
+        intert.sendKeys(extrapropertyNameToCheck);
+        List<WebElement> extrapropertiesAfter= driver.findElements(By.xpath(ExtraXpath+"/..//span[@class='text-overflow']"));
+        String firstPropertyName= extrapropertiesAfter.get(0).getText();
         attachScreenshot();
-        Assert.assertThat(firstpropertyname, CoreMatchers.containsString(thirdpropertyname));
+        Assert.assertThat(firstPropertyName, CoreMatchers.containsString(extrapropertyNameToCheck));
 
     }
 
