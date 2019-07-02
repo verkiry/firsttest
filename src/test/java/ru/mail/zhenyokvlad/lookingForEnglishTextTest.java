@@ -127,7 +127,8 @@ public class lookingForEnglishTextTest {
 
     }
 
-    @Epic(value = "Поиск непереведенных строк в фильтре Категории")
+    @Epic(value = "Поиск непереведенных фильтров")
+    @Feature(value = "Подфильтры в Категории")
     @Test
     public void lookingInSubCategories() {
         //тут проверяем подкатегории в фильтре Категории

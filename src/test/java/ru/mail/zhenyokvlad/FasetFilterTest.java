@@ -39,6 +39,7 @@ public class FasetFilterTest {
     }
 
     @Epic(value = "Проверка фасетных фильтров")
+    @Description(value = "Фильтры первого уровня")
     @Test
     public void FasetFilterCheck() {
         //setup();
@@ -228,4 +229,116 @@ public class FasetFilterTest {
 
 
     }
+    @Epic(value = "Проверка фасетных фильтров")
+    @Description(value = "Подфильтры фильтра Категории")
+    @Test
+    public void CategorySubFiltersCheck() {
+        //setup();
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER);
+        int max = 4; //тут указываем, какую часть скрытых фильтров будем проверять (проверка в случайном порядке), вероятность проверки каждого равно 1/max, т.е. если max=3, то проверяем где-то 1/3, если 4, то 1/4, max=1- проверяем все
+        int t = 0;
+        WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
+        while (t < 80) try { //входим в воркспейс
+            try {
+                //ДЕЛАЕМ
+                Thread.sleep(500);
+                t++;
+                //500 - 0.5 сек
+            } catch (InterruptedException ex) {
+            }
+            workspace.click();
+            break;
+        } catch (Exception ex) {
+        }
+
+        WebDriverWait wait = new WebDriverWait(driver, 80);
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"))); //ждем закрытия прелоадера
+
+
+        WebElement categories = driver.findElement(By.xpath("//span[@title='Категории']/..//span[@class='b-filterItem_arrow f_chO']"));
+        categories.click();
+        List<WebElement> subCategoriesNamesArray = driver.findElements(By.xpath("//span[@title='Категории']/../../..//span[@class='text-overflow']"));
+        String[] subCategoriesNames = new String[subCategoriesNamesArray.size()];
+        for (int i = 0; i < subCategoriesNamesArray.size(); i++) {
+            subCategoriesNames[i] = subCategoriesNamesArray.get(i).getAttribute("innerText");
+        }
+        List<WebElement> arrowsArray = driver.findElements(By.xpath("//span[@title='Категории']/../../..//div[@class='b-filterItem_bvar']//span[@class='b-filterItem_arrow f_chO']"));
+
+        for (int i = 0; i < arrowsArray.size(); i++) {
+            List<WebElement> arrowsArray1 = driver.findElements(By.xpath("//span[@title='Категории']/../../..//div[@class='b-filterItem_bvar']//span[@class='b-filterItem_arrow f_chO']"));
+            arrowsArray1.get(i).click();
+            List<WebElement> subFiltersNamesArray = driver.findElements(By.xpath("//span[@title='Категории']/../../..//div[@class='b-filterItem_bvar']//span[@class='b-filterItem_arrow f_chO open']/../../../div[@class='bvar_dropdown f_chB']//span[@class='text-overflow']"));
+            String[] subFiltersNames = new String[subFiltersNamesArray.size()];
+            System.out.println(subFiltersNamesArray.size());
+            for (int l = 0; l < subFiltersNamesArray.size(); l++) {
+                subFiltersNames[l] = subFiltersNamesArray.get(l).getText();
+                System.out.println(subFiltersNames[l]);
+            }
+            List<WebElement> subFiltersCheckboxes = driver.findElements(By.xpath("//span[@title='Категории']/../../..//div[@class='b-filterItem_bvar']//span[@class='b-filterItem_arrow f_chO open']/../../../div[@class='bvar_dropdown f_chB']//input[@class='cbx-input noChecked']"));
+            System.out.println(subFiltersCheckboxes.size());
+            WebElement closeArrow = driver.findElement(By.xpath("//span[@title='Категории']/../../..//div[@class='b-filterItem_bvar']//span[@class='b-filterItem_arrow f_chO open']"));
+            closeArrow.click();
+            for (int j = 0; j < subFiltersCheckboxes.size(); j++) {
+                int rand = (int) (Math.random() * max);
+                if (rand == 0) {
+                    List<WebElement> arrowsArray2 = driver.findElements(By.xpath("//span[@title='Категории']/../../..//div[@class='b-filterItem_bvar']//span[@class='b-filterItem_arrow f_chO']"));
+                    arrowsArray2.get(i).click();
+                    List<WebElement> subFiltersCheckboxes1 = driver.findElements(By.xpath("//span[@title='Категории']/../../..//div[@class='b-filterItem_bvar']//span[@class='b-filterItem_arrow f_chO open']/../../../div[@class='bvar_dropdown f_chB']//input[@class='cbx-input noChecked']"));
+                    subFiltersCheckboxes1.get(j).click();
+                    WebElement acceptButton = driver.findElement(By.xpath("//button[@class='btn btn-primary']"));
+                    acceptButton.click();
+                    try {
+                        //ДЕЛАЕМ
+                        Thread.sleep(1000);
+                        //500 - 0.5 сек
+                    } catch (InterruptedException ex) {
+                    }
+                    WebDriverWait wait1 = new WebDriverWait(driver, 80);
+                    wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
+                    try {
+                        //ДЕЛАЕМ
+                        Thread.sleep(500);
+                        //500 - 0.5 сек
+                    } catch (InterruptedException ex) {
+                    }
+                    int sidebarCounter = Integer.parseInt(driver.findElement(By.xpath("//span[@title='Категории']/../../..//div[@class='b-filterItem_bvar']//input[@class='cbx-input indeterminate']/../../..//div[@class='b-filterItem_bvar-count f_count']")).getAttribute("innerText"));
+                    int gridCounter = Integer.parseInt(driver.findElement(By.xpath("//span[@class='app-content-title-count']")).getText());
+                    if (sidebarCounter != gridCounter) { //сравниваем счетчики на сайдбаре и в гриде, если не равны, заносим в отчет
+                        Allure.addAttachment("Не сошлись числа на сайдбаре и в гриде в " + subCategoriesNames[i] + " -> " + subFiltersNames[j], "Не сошлись числа на сайдбаре и в гриде");
+                        attachScreenshot();
+                        System.out.println("Error");
+                    }
+                    WebElement clearButton = driver.findElement(By.xpath("//button[@class='filter-reset']"));
+                    t=0;
+                    while (t < 80) try {
+                        try {
+                            //ДЕЛАЕМ
+                            Thread.sleep(500);
+                            t++;
+                            //500 - 0.5 сек
+                        } catch (InterruptedException ex) {
+                        }
+                        clearButton.click();
+                        break;
+                    } catch (Exception ex) {
+                    }
+                    //жмем кнопку Сбросить
+                    try {
+                        //ДЕЛАЕМ
+                        Thread.sleep(1000);
+                        //500 - 0.5 сек
+                    } catch (InterruptedException ex) {
+                    }
+                    WebDriverWait wait2 = new WebDriverWait(driver, 80);
+                    wait2.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
+                }
+            }
+
+        }
+    }
+
 }
