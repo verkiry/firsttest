@@ -95,7 +95,20 @@ public class caseTest {
         WebElement threeDots= driver.findElement(By.xpath("//div[@class='barMenu-trigger']"));
         Actions actions = new Actions(driver);
         actions.moveToElement(threeDots).build().perform();
-        threeDots.click();
+     int t = 0;
+     while (t < 80) try {
+         try {
+             //ДЕЛАЕМ
+             Thread.sleep(500);
+             t++;
+             //500 - 0.5 сек
+         } catch (InterruptedException ex) {
+
+         }
+         threeDots.click();
+         break;
+     } catch (Exception ex) {
+     }
         WebElement deleteCase= driver.findElement(By.xpath("//*[@id=\"barMenuWindow\"]/button[2]"));
         deleteCase.click();
         Alert alert= (new WebDriverWait(driver,10)).until(ExpectedConditions.alertIsPresent());
