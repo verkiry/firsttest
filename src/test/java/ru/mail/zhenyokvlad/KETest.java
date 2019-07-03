@@ -123,8 +123,14 @@ public class KETest {
         if (amountOfYellowKE==amountOfYellowKEAfter-amountOfKeToSet){
             checkPassed++; //если количество активных КЕ увеличилось на amountOfKeToSet, то Passed
         }
+        else {
+            Allure.addAttachment("После обновления страницы количество неактивных КЕ не совпадает с количеством до обновления", " ");
+        }
         if (KEAmount==KEAmountAfter-amountOfKeToSet){
             checkPassed++; //если количество КЕ на сайдбаре увеличиилось на amountOfKeToSet, то Passed
+        }
+        else {
+            Allure.addAttachment("Не обновился счетчик на сайдбаре", " ");
         }
         //System.out.println(checkPassed);
         Allure.addAttachment("Установили " + amountOfKeToSet + " КЕ", " ");
