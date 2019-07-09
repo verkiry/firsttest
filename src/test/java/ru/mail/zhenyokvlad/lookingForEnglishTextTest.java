@@ -26,7 +26,7 @@ public class lookingForEnglishTextTest {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("http://192.168.4.222/login");
+        driver.get("http://192.168.4.222//login");
     }
 
     @After
