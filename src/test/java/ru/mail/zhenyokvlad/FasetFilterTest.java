@@ -48,7 +48,7 @@ public class FasetFilterTest {
         WebElement passwordField = driver.findElement(By.name("PWD"));
         passwordField.sendKeys("12345");
         passwordField.sendKeys(Keys.ENTER);
-        int max = 4; //тут указываем, какую часть скрытых фильтров будем проверять (проверка в случайном порядке), вероятность проверки каждого равно 1/max, т.е. если max=3, то проверяем где-то 1/3, если 4, то 1/4, max=1- проверяем все
+        int max = 6; //тут указываем, какую часть скрытых фильтров будем проверять (проверка в случайном порядке), вероятность проверки каждого равно 1/max, т.е. если max=3, то проверяем где-то 1/3, если 4, то 1/4, max=1- проверяем все
         int t = 0;
         WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
         while (t < 80) try { //входим в воркспейс
@@ -239,7 +239,7 @@ public class FasetFilterTest {
         WebElement passwordField = driver.findElement(By.name("PWD"));
         passwordField.sendKeys("12345");
         passwordField.sendKeys(Keys.ENTER);
-        int max = 4; //тут указываем, какую часть скрытых фильтров будем проверять (проверка в случайном порядке), вероятность проверки каждого равно 1/max, т.е. если max=3, то проверяем где-то 1/3, если 4, то 1/4, max=1- проверяем все
+        int max = 6; //тут указываем, какую часть скрытых фильтров будем проверять (проверка в случайном порядке), вероятность проверки каждого равно 1/max, т.е. если max=3, то проверяем где-то 1/3, если 4, то 1/4, max=1- проверяем все
         int t = 0;
         WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
         while (t < 80) try { //входим в воркспейс

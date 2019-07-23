@@ -273,7 +273,7 @@ public class dateSortTest {
     @Test
     @Epic(value = "Проверка сортировки по дате")
     @Feature(value = "Проверка сортировки в Устройства Даты создания по возрастанию")
-    public void SortDevicesCreationDateUpcending() {
+    public void SortDevicesCreationDateAscending() {
         //setup();
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
@@ -358,7 +358,7 @@ public class dateSortTest {
 
     @Test
     @Epic(value = "Проверка сортировки по дате")
-    @Feature(value = "Проверка сортировки в Устройства Даты создания по убыванию")
+    @Feature(value = "Проверка сортировки в Устройства Даты загрузки по убыванию")
     public void SortDevicesDownloadDateDescending() {
         //setup();
         WebElement loginField = driver.findElement(By.name("UID"));
@@ -446,7 +446,7 @@ public class dateSortTest {
     @Test
     @Epic(value = "Проверка сортировки по дате")
     @Feature(value = "Проверка сортировки в Устройства Даты загрузки по возрастанию")
-    public void SortDevicesDownloadDateUpcending() {
+    public void SortDevicesDownloadDateAscending() {
         //setup();
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
