@@ -5,6 +5,7 @@ import io.qameta.allure.Attachment;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
@@ -44,6 +45,7 @@ public class lookingForEnglishTextTest {
     @Test
     public void lookingInCategories() {
         //setup();
+        int amountOfMistakes=0;
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
@@ -82,14 +84,16 @@ public class lookingForEnglishTextTest {
             Boolean isenglish = checkLanguage.checker(Texts.get(i).getText()); //проверяем, полностью ли текст на английском
             if (isenglish == true)
                 Allure.addAttachment("Непереведенный фильтр Категории -> "+text, text); //если поностью на английском, заносим это в отчет
+            amountOfMistakes++;
         }
-
+        Assert.assertEquals(amountOfMistakes,0);
     }
 
     @Epic(value = "Поиск непереведенных фильтров")
     @Feature(value = "Направления")
     @Test
     public void lookingInDirections() {
+        int amountOfMistakes=0;
         //данный тест работает аналогично тесту по категориям
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
@@ -123,14 +127,16 @@ public class lookingForEnglishTextTest {
             Boolean isenglish = checkLanguage.checker(Texts.get(i).getText());
             if (isenglish == true)
                 Allure.addAttachment("Непереведенный фильтр Направления -> " + text, text);
+            amountOfMistakes++;
         }
-
+        Assert.assertEquals(amountOfMistakes,0);
     }
 
     @Epic(value = "Поиск непереведенных фильтров")
     @Feature(value = "Подфильтры в Категории")
     @Test
     public void lookingInSubCategories() {
+        int amountOfMistakes=0;
         //тут проверяем подкатегории в фильтре Категории
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
@@ -176,12 +182,13 @@ public class lookingForEnglishTextTest {
                 if (isenglish == true) {
                     Allure.addAttachment("Непереведенный фильтрв в Категории ->" + categoryName + " -> " + categoryText, "непереведенная подкатегория " + categoryName + " в категории " + categoryText);
                     attachScreenshot();
+                    amountOfMistakes++;
                 }
             }
 
         }
 
-
+        Assert.assertEquals(amountOfMistakes,0);
 
     }
 }
