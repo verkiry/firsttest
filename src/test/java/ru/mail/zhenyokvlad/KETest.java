@@ -33,14 +33,6 @@ public class KETest {
 
     @After
     public void after() {
-        List<WebElement> yellowKE= driver.findElements(By.xpath("//div[@class='app-mailBox-item-link-favourit-icon active']"));
-        for (int i=0; i<amountOfKeToSet; i++){
-            yellowKE.get(i).click(); //после теста убираем звездочки, которые поставили
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-            }
-        }
         driver.quit();
     }
     @Attachment
