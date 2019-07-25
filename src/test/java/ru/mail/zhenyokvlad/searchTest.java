@@ -1,8 +1,6 @@
 package ru.mail.zhenyokvlad;
 
-import io.qameta.allure.Allure;
-import io.qameta.allure.Attachment;
-import io.qameta.allure.Step;
+import io.qameta.allure.*;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Assert;
@@ -13,8 +11,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -47,9 +43,10 @@ public class searchTest {
         driver.quit();
     }
 
-    @Epic(value = "Проверка поиска по описанию")
+    @Epic(value = "Проверка поиска")
+    @Feature(value="Проверка поиска по описанию в Рабочем пространстве")
     @Test
-    public void SearchCheck() {
+    public void WorkspaceSearchCheck() {
         //setup();
         int amountOfMistakes=0;
         WebElement loginField = driver.findElement(By.name("UID"));
@@ -145,5 +142,102 @@ public class searchTest {
             }
         }
         Assert.assertEquals(amountOfMistakes,0);
+    }
+    @Epic(value = "Проверка поиска")
+    @Feature(value="Проверка поиска по имени дела в Дела")
+    @Test
+    public void CaseSearchTest() {
+        int counter=0;
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER); //залогинились
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+        }
+        WebDriverWait wait1 = new WebDriverWait(driver, 60);
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"))); //ждем закрытия прелоадера
+        WebElement selectElem= driver.findElement(By.xpath("//select[@name='sizePage']"));
+        Select select=new Select(selectElem);
+        selectElem.click();
+        select.selectByVisibleText("100 на странице"); //отображаем 100 событий на странице
+        List<WebElement> cases=driver.findElements(By.xpath("//div[@class='eventsContent-link']")); //список всех дел
+        int randNumber=(int) (Math.random() * cases.size());
+        String caseNameToSearch=cases.get(randNumber).findElement(By.xpath("./div[@class='eventsItemChild itemEvent itemEventData'][1]//div[@class='text-overflow']")).getAttribute("innerText"); //берем имя случайного дела
+        WebElement searchField=driver.findElement(By.id("flt"));
+        searchField.sendKeys(caseNameToSearch);//ввели имя случайного дела в строку поиска
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException ex) {
+        }
+        List<WebElement> resultCases=driver.findElements(By.xpath("//div[@class='eventsContent-link']")); //список дел после ввода имени в строку поиска
+        String [] resultCasesNames=new String[resultCases.size()];
+        for (int i=0; i<resultCases.size(); i++){
+            resultCasesNames[i]=resultCases.get(i).findElement(By.xpath("./div[@class='eventsItemChild itemEvent itemEventData'][1]//div[@class='text-overflow']")).getAttribute("innerText"); //записали имена всех дел в массив
+        }
+        for (int j=0; j<resultCasesNames.length; j++){
+            if (resultCasesNames[j].toLowerCase().contains(caseNameToSearch.toLowerCase()) == false) { //проверяем, есть ли в именах дел строка, которую вводили, если нет, наращиваем счетчик
+                counter++;
+            }
+        }
+        if (counter!=0) { //если счетчик не нулевой, значит, хотя бы в одном из имен кейсов нет строки, которую вводили в поле поиска, значит- Test Failed
+            System.out.println("!!!!!!!!!!!!");
+            attachScreenshot();
+            Allure.addAttachment("Неверный результат поиска по имени кейса " + caseNameToSearch, " ");
+            Assert.assertEquals(0, counter);
+        }
+    }
+    @Epic(value = "Проверка поиска")
+    @Feature(value="Проверка поиска по имени устройства в Управление устройствами")
+    @Test
+    public void DevicesSearchTest() {
+        int counter=0;
+        WebElement loginField = driver.findElement(By.name("UID"));
+        loginField.sendKeys("maxim");
+        WebElement passwordField = driver.findElement(By.name("PWD"));
+        passwordField.sendKeys("12345");
+        passwordField.sendKeys(Keys.ENTER); //залогинились
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+        }
+        WebDriverWait wait1 = new WebDriverWait(driver, 60);
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"))); //ждем закрытия прелоадера
+        driver.get("http://192.168.4.222/devices");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+        }
+        WebElement selectElem= driver.findElement(By.xpath("//select[@name='sizePage']"));
+        Select select=new Select(selectElem);
+        selectElem.click();
+        select.selectByVisibleText("100 на странице"); //отображаем 100 событий на странице
+        List<WebElement> devices=driver.findElements(By.xpath("//div[@class='eventsContent-link']")); //список всех дел
+        int randNumber=(int) (Math.random() * devices.size());
+        String deviceNameToSearch=devices.get(randNumber).findElement(By.xpath("./div[@class='eventsItemChild itemEvent itemEventData'][1]//div[@class='text-overflow']")).getAttribute("innerText"); //берем имя случайного устройства
+        WebElement searchField=driver.findElement(By.id("flt"));
+        searchField.sendKeys(deviceNameToSearch);//ввели имя случайного устройства в строку поиска
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException ex) {
+        }
+        List<WebElement> resultCases=driver.findElements(By.xpath("//div[@class='eventsContent-link']")); //список устройств после ввода имени в строку поиска
+        String [] resultCasesNames=new String[resultCases.size()];
+        for (int i=0; i<resultCases.size(); i++){
+            resultCasesNames[i]=resultCases.get(i).findElement(By.xpath("./div[@class='eventsItemChild itemEvent itemEventData'][1]//div[@class='text-overflow']")).getAttribute("innerText"); //записали имена всех устройств в массив
+        }
+        for (int j=0; j<resultCasesNames.length; j++){
+            if (resultCasesNames[j].toLowerCase().contains(deviceNameToSearch.toLowerCase()) == false) { //проверяем, есть ли в именах устройств строка, которую вводили, если нет, наращиваем счетчик
+                counter++;
+            }
+        }
+        if (counter!=0) { //если счетчик не нулевой, значит, хотя бы в одном из имен устройств нет строки, которую вводили в поле поиска, значит- Test Failed
+            System.out.println("!!!!!!!!!!!!");
+            attachScreenshot();
+            Allure.addAttachment("Неверный результат поиска по имени устройства " + deviceNameToSearch, " ");
+            Assert.assertEquals(0, counter);
+        }
     }
 }
