@@ -56,7 +56,7 @@ public class searchTest {
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
         passwordField.sendKeys("12345");
-        passwordField.sendKeys(Keys.ENTER);
+        passwordField.sendKeys(Keys.ENTER); //залогинились
         int t = 0;
         WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
         while (t < 80) try {
@@ -74,10 +74,11 @@ public class searchTest {
         }
         WebDriverWait wait1 = new WebDriverWait(driver, 60);
         wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
+        //ждем закрытия прелоадера
         WebElement selectElem = driver.findElement(By.xpath("//select[@name='sizePage']"));
         Select select = new Select(selectElem);
         selectElem.click();
-        select.selectByVisibleText("100 на странице");
+        select.selectByVisibleText("100 на странице"); //отображаем 100 записей на странице
         try {
             Thread.sleep(300);
         } catch (InterruptedException ex) {
@@ -88,7 +89,7 @@ public class searchTest {
         String checkword = wordsToCheck[randNumber]; //берем случайное слово из тестовой выборки
         WebElement searchfield = driver.findElement(By.id("searchInput"));
         searchfield.sendKeys(checkword);
-        searchfield.sendKeys(Keys.ENTER);
+        searchfield.sendKeys(Keys.ENTER); //ввели полученное слово в строку поиска и нажали Enter
         try {
             Thread.sleep(500);
         } catch (InterruptedException ex) {
@@ -96,18 +97,20 @@ public class searchTest {
         WebDriverWait wait2 = new WebDriverWait(driver, 80);
         wait2.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div"))); //ждем закрытия прелоадера
         String amountOfPagesString = driver.findElement(By.xpath("//*[@id=\"ws-grid-pg\"]/div/div[2]/span[2]")).getText();
-        int amountOfPages = Integer.parseInt(amountOfPagesString);
+        int amountOfPages = Integer.parseInt(amountOfPagesString); //количество страниц
 
         for (int r = 0; r < amountOfPages; r++) {
-            List<WebElement> strings = driver.findElements(By.xpath("//div[@class='app-mailBox-item-link']"));
+            List<WebElement> strings = driver.findElements(By.xpath("//div[@class='app-mailBox-item-link']")); //количество записей на текущей странице
             for (int j = 0; j < strings.size(); j++) {
                 ArrayList<String> fromtodescription = new ArrayList<String>();
                 try {
                     fromtodescription.add(strings.get(j).findElement(By.xpath("./div[@class='app-mailBox-item-link-desc app-mailBox-desc']/div[@class='app-mailBox-item-link-desc-item'][1]//div[@class='app-mailBox-item-link-desc-item-info-text']")).getAttribute("innerText"));
+                //пробуем получить текст из поля Описание
                 } catch (NoSuchElementException e) {
                 }
-                if (fromtodescription.get(0).toLowerCase().contains(checkword.toLowerCase()) == false) {
+                if (fromtodescription.get(0).toLowerCase().contains(checkword.toLowerCase()) == false) { //если в поле Описание не нашлось слова, которое искали
                     try {
+                        //пробуем получить тексты из полей От и До
                         List<WebElement> fromto = strings.get(j).findElements(By.xpath("./div[@class='app-mailBox-item-link-info app-mailBox-type']//div[@class='app-mailBox-item-link-info-user-name-text']"));
                         System.out.println(fromto.size());
                         ArrayList<String> fromToString = new ArrayList<String>();
@@ -121,11 +124,11 @@ public class searchTest {
                 }
                 int counter = 0;
                 for (int l = 0; l < fromtodescription.size(); l++) {
-                    if (fromtodescription.get(l).toLowerCase().contains(checkword.toLowerCase()) == false) {
-                        counter++;
+                    if (fromtodescription.get(l).toLowerCase().contains(checkword.toLowerCase()) == false) {// проверяем, есть ли в полях Описание, От и До искомая строка
+                        counter++;//если нет, наращиваем счетчик
                     }
                 }
-                if (counter == fromtodescription.size()) {
+                if (counter == fromtodescription.size()) { //если нет ни в одном из полей- ошибка
                     amountOfMistakes++;
                     strings.get(j).click();
                     Allure.addAttachment("Неверный результат поиска по слову " + checkword, "строка номер "+ j);
@@ -133,7 +136,7 @@ public class searchTest {
                 }
             }
             WebElement nextButton= driver.findElement(By.xpath("//a[@class='app-pagination-arrow-next']"));
-            nextButton.click();
+            nextButton.click(); //переходим на следующую страницу
             try {
                 Thread.sleep(700);
                 t++;

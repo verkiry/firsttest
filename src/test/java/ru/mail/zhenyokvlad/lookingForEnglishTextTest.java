@@ -82,9 +82,10 @@ public class lookingForEnglishTextTest {
         for (int i = 0; i < amountofelements; i++) {
             String text = Texts.get(i).getText(); //получаем текст внутри пункта
             Boolean isenglish = checkLanguage.checker(Texts.get(i).getText()); //проверяем, полностью ли текст на английском
-            if (isenglish == true)
-                Allure.addAttachment("Непереведенный фильтр Категории -> "+text, text); //если поностью на английском, заносим это в отчет
-            amountOfMistakes++;
+            if (isenglish == true) {
+                Allure.addAttachment("Непереведенный фильтр Категории -> " + text, text); //если поностью на английском, заносим это в отчет
+                amountOfMistakes++;
+            }
         }
         Assert.assertEquals(amountOfMistakes,0);
     }
@@ -125,9 +126,10 @@ public class lookingForEnglishTextTest {
         for (int i = 0; i < amountofelements; i++) {
             String text = Texts.get(i).getText();
             Boolean isenglish = checkLanguage.checker(Texts.get(i).getText());
-            if (isenglish == true)
+            if (isenglish == true) {
                 Allure.addAttachment("Непереведенный фильтр Направления -> " + text, text);
-            amountOfMistakes++;
+                amountOfMistakes++;
+            }
         }
         Assert.assertEquals(amountOfMistakes,0);
     }
