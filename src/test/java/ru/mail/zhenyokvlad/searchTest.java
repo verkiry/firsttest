@@ -105,7 +105,7 @@ public class searchTest {
                 ArrayList<String> fromtodescription = new ArrayList<String>();
                 try {
                     fromtodescription.add(strings.get(j).findElement(By.xpath("./div[@class='app-mailBox-item-link-desc app-mailBox-desc']/div[@class='app-mailBox-item-link-desc-item'][1]//div[@class='app-mailBox-item-link-desc-item-info-text']")).getAttribute("innerText"));
-                //пробуем получить текст из поля Описание
+                    //пробуем получить текст из поля Описание
                 } catch (NoSuchElementException e) {
                 }
                 if (fromtodescription.get(0).toLowerCase().contains(checkword.toLowerCase()) == false) { //если в поле Описание не нашлось слова, которое искали

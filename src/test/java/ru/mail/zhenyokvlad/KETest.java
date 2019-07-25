@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
@@ -50,12 +51,12 @@ public class KETest {
     @Epic(value = "Проверка КЕ")
     @Test
     public void KETest() {
+        int amountOfKeToSet=3; //количество КЕ, которое будем устанавливать в рамках теста
         WebElement loginField = driver.findElement(By.name("UID"));
         loginField.sendKeys("maxim");
         WebElement passwordField = driver.findElement(By.name("PWD"));
         passwordField.sendKeys("12345");
-        passwordField.sendKeys(Keys.ENTER);
-        //Залогинились
+        passwordField.sendKeys(Keys.ENTER); //залогинились
         int t = 0;
         WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
         while (t < 80) try {
@@ -66,75 +67,63 @@ public class KETest {
                 //500 - 0.5 сек
             } catch (InterruptedException ex) {
             }
-            // WebElement workspace = driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-cases/div[1]/wa-header/div/div/div/div[2]/ul/li[2]/a/span[2]"));
             workspace.click();
             break;
         } catch (Exception ex) {
         }
-        WebDriverWait wait = new WebDriverWait(driver, 40);
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
-        //Перешли в воркспейс и ждем, пока он пропадет, чтобы продолжить рбаоту
-        //WebElement nextButton=driver.findElement(By.xpath("//a[@class='app-pagination-arrow-next']")); //задел на будущее
-        List<WebElement> grayKE= driver.findElements(By.xpath("//div[@class='app-mailBox-item-link-favourit-icon ']"));
-        //получили список серых (не активных) звездочек
-        List<WebElement> yellowKE= driver.findElements(By.xpath("//div[@class='app-mailBox-item-link-favourit-icon active']"));
-        //получили список желтых (активных) звездочек
-       String KECounter=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[5]/div[1]/span")).getText();
-       int KEAmount=Integer.parseInt(KECounter); //получили количество КЕ из счетчика на сайдбаре
-       int amountOfGrayKE=grayKE.size(); //количество неактивных звездочек
-       int amountOfYellowKE=yellowKE.size(); //количество активных звездочек
-       //System.out.println(amountOfGrayKE);
-       //System.out.println(amountOfYellowKE);
-       //System.out.println(KEAmount);
-
-        for (int i=0; i<amountOfKeToSet; i++){ //ставим несколько КЕ
-            grayKE.get(i).click();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
+        WebDriverWait wait1 = new WebDriverWait(driver, 60);
+        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
+        //ждем закрытия прелоадера
+        WebElement selectElem = driver.findElement(By.xpath("//select[@name='sizePage']"));
+        Select select = new Select(selectElem);
+        selectElem.click();
+        select.selectByVisibleText("100 на странице"); //отображаем 100 записей на странице
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException ex) {
+        }
+        String KECounter=driver.findElement(By.xpath("//span[@title='Ключевые доказательства']/../..//span[@class='b-filterItem_count f_count']")).getAttribute("innerText");
+        int KEAmountBeforeRefresh=Integer.parseInt(KECounter); //получили количество КЕ из счетчика на сайдбаре
+        List<WebElement> strings = driver.findElements(By.xpath("//div[@class='app-mailBox-item-link']")); //записи на текущей странице
+        int counterOfSetKe=0;
+        List<Integer> numberOfKeString = new ArrayList<Integer>();
+        for (int i=0; i<strings.size(); i++){
+            if (counterOfSetKe<amountOfKeToSet) {
+                System.out.println(i);
+                try {
+                    strings.get(i).findElement(By.xpath(".//div[@class='app-mailBox-item-link-favourit-icon ']")).click(); //ищем серую звездочку, если находим-кликаем
+                    counterOfSetKe++;
+                    numberOfKeString.add(i); //запоминаем номер строки, где кликнули
+                } catch (NoSuchElementException e) {
+                }
             }
         }
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-        }
         driver.navigate().refresh(); //обновляем страницу
-        WebDriverWait wait1 = new WebDriverWait(driver, 40);
-        wait1.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
+        WebDriverWait wait2 = new WebDriverWait(driver, 40);
+        wait2.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[1]/wa-root/wa-wait/div/div/div")));
         //ждем исчезновение прелоадера, чтобы продолжить работу
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
+        List<WebElement> stringsAfterRefresh = driver.findElements(By.xpath("//div[@class='app-mailBox-item-link']")); //записи на текущей странице
+        String KECounterAfter=driver.findElement(By.xpath("//span[@title='Ключевые доказательства']/../..//span[@class='b-filterItem_count f_count']")).getAttribute("innerText"); //счетчик КЕ после перезагрузки
+        int KEAmountAfterRefresh=Integer.parseInt(KECounterAfter); //получили количество КЕ из счетчика на сайдбаре после перезагрузки
+        int errorCounter=0;
+        for (int l=0; l<numberOfKeString.size(); l++){
+            try {
+                stringsAfterRefresh.get(numberOfKeString.get(l)).findElement(By.xpath(".//div[@class='app-mailBox-item-link-favourit-icon active']")).click(); //проверяем, есть ли активная звездочка у строк, номера которых записали. Если есть- снимаем, чтобы после теста ничего за собой не оставить
+            } catch (NoSuchElementException e){
+                errorCounter++; //если активной звездочки нет- ошибка
+            }
         }
-
-        List<WebElement> yellowKEAfter= driver.findElements(By.xpath("//div[@class='app-mailBox-item-link-favourit-icon active']"));
-        List<WebElement> grayKEAfter= driver.findElements(By.xpath("//div[@class='app-mailBox-item-link-favourit-icon ']"));
-        String KECounterAfter=driver.findElement(By.xpath("/html/body/div[1]/wa-root/wa-workspace/div/div[2]/ws-tab/div/div[1]/div[1]/div[2]/div/div[1]/div[5]/div[1]/span")).getText();
-        int KEAmountAfter=Integer.parseInt(KECounterAfter); //количество КЕ на сайдбаре после добавления новых
-        int amountOfGrayKEAfter=grayKEAfter.size(); //количество неактивных КЕ после добавления новых
-        int amountOfYellowKEAfter=yellowKEAfter.size(); //количество активных КЕ после добавления новых
-        //System.out.println(amountOfGrayKEAfter);
-        //System.out.println(amountOfYellowKEAfter);
-        //System.out.println(KEAmountAfter);
-        int checkPassed=0; //счетчик количества пройденных проверок в рамках данного теста
-        if (amountOfGrayKE==amountOfGrayKEAfter+amountOfKeToSet){
-            checkPassed++; //если количество неактивных КЕ уменьшилось на amountOfKeToSet, то Passed
+        int amountOfFailedTests=0;
+        if (KEAmountAfterRefresh!=KEAmountBeforeRefresh+amountOfKeToSet){ //если счетчик на сайдбаре после обновления не равен счетчик до обновления + количество установленных в рамках теста КЕ- ошибка
+            Allure.addAttachment("Врет счетчик КЕ на сайдбаре", "Было "+KEAmountBeforeRefresh+ " KE, " + "установили " + amountOfKeToSet + ", а счетчик на сайдбаре указывает "+KEAmountAfterRefresh);
+            attachScreenshot();
+            amountOfFailedTests++;
         }
-        if (amountOfYellowKE==amountOfYellowKEAfter-amountOfKeToSet){
-            checkPassed++; //если количество активных КЕ увеличилось на amountOfKeToSet, то Passed
+        if (errorCounter!=0){ //если хоть у одной из записей, куда ставили КЕ, после обновления страницы КЕ не активно- ошибка
+            Allure.addAttachment("КЕ пропали или съехали после обновления страницы", " ");
+            attachScreenshot();
+            amountOfFailedTests++;
         }
-        else {
-            Allure.addAttachment("После обновления страницы количество неактивных КЕ не совпадает с количеством до обновления", " ");
-        }
-        if (KEAmount==KEAmountAfter-amountOfKeToSet){
-            checkPassed++; //если количество КЕ на сайдбаре увеличиилось на amountOfKeToSet, то Passed
-        }
-        else {
-            Allure.addAttachment("Не обновился счетчик на сайдбаре", " ");
-        }
-        //System.out.println(checkPassed);
-        Allure.addAttachment("Установили " + amountOfKeToSet + " КЕ", " ");
-        attachScreenshot(); //скрин в отчет
-        Assert.assertEquals(3,checkPassed); //если все 3 проверки прошли успешно, то тест пройден, если хоть один провалился- Failed
+        Assert.assertEquals(0,amountOfFailedTests); //если не прошла хотя бы одна из двух проверок- Test Failed
     }
 }
